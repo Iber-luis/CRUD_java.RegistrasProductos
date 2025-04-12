@@ -54,23 +54,26 @@ public class controladorProductos {
     public void agregarProducto(JTextField nombre, JTextField precio, JTextField stock, JTextField estado) {
         CConexion conexion = new CConexion();
         ModeloProductos producto = new ModeloProductos();
-
+        
+        
         String consulta = "INSERT INTO productos (nombres, precio, stock, estado) VALUES (?, ?, ?, ?)";
 
         try {
+            
             producto.setNombre(nombre.getText());
             producto.setPrecio(Double.valueOf(precio.getText()));
             producto.setStock(Integer.parseInt(stock.getText()));
-            producto.setEstado(estado.getText());
+            String estadoProducto = producto.getStock() > 0 ? "activo" : "no activo";
+            producto.setEstado(estadoProducto); 
 
             CallableStatement cs = conexion.estableceConexion().prepareCall(consulta);
             cs.setString(1, producto.getNombre());
             cs.setDouble(2, producto.getPrecio());
             cs.setInt(3, producto.getStock());
-            cs.setString(4, producto.getEstado());
-            
-           
+            cs.setString(4, producto.getEstado()); 
+
             cs.execute();
+            
             JOptionPane.showMessageDialog(null, "Producto guardado");
 
         } catch (Exception e) {
@@ -100,18 +103,18 @@ public class controladorProductos {
     String consulta = "UPDATE productos SET nombres = ?, precio = ?, stock = ?, estado = ? WHERE id = ?";
 
     try {
-        // Asignamos los valores al objeto producto
+        
         producto.setId(Integer.parseInt(id.getText()));
         producto.setNombre(nombre.getText());
         producto.setPrecio(Double.parseDouble(precio.getText()));
         int stockValor = Integer.parseInt(stock.getText());
         producto.setStock(stockValor);
 
-        // Determinamos el estado según el stock
+        
         String estado = stockValor > 0 ? "activo" : "no activo";
         producto.setEstado(estado);
 
-        // Usamos PreparedStatement en lugar de CallableStatement
+       
         PreparedStatement ps = conexion.estableceConexion().prepareStatement(consulta);
         ps.setString(1, producto.getNombre());
         ps.setDouble(2, producto.getPrecio());

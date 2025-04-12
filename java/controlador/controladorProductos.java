@@ -4,6 +4,7 @@ import conexionDB.CConexion;
 import modelos.ModeloProductos;
 
 import java.sql.CallableStatement;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
@@ -22,10 +23,12 @@ public class controladorProductos {
         modelo.addColumn("NOMBRES");
         modelo.addColumn("PRECIO");
         modelo.addColumn("STOCK");
+        modelo.addColumn("ESTADO");
+        
 
         tb_productos.setModel(modelo);
 
-        String sql = "SELECT productos.id, productos.nombres, productos.precio, productos.stock FROM productos";
+        String sql = "SELECT productos.id, productos.nombres, productos.precio, productos.stock, productos.estado FROM productos";
 
         try {
             Statement st = conexion.estableceConexion().createStatement();
@@ -36,7 +39,8 @@ public class controladorProductos {
                     rs.getInt("id"),
                     rs.getString("nombres"),
                     rs.getDouble("precio"),
-                    rs.getInt("stock")
+                    rs.getInt("stock"),
+                    rs.getString("estado"),
                 });
             }
 
@@ -47,22 +51,25 @@ public class controladorProductos {
         }
     }
 
-    public void agregarProducto(JTextField nombre, JTextField precio, JTextField stock) {
+    public void agregarProducto(JTextField nombre, JTextField precio, JTextField stock, JTextField estado) {
         CConexion conexion = new CConexion();
         ModeloProductos producto = new ModeloProductos();
 
-        String consulta = "INSERT INTO productos (nombres, precio, stock) VALUES (?, ?, ?)";
+        String consulta = "INSERT INTO productos (nombres, precio, stock, estado) VALUES (?, ?, ?, ?)";
 
         try {
             producto.setNombre(nombre.getText());
             producto.setPrecio(Double.valueOf(precio.getText()));
             producto.setStock(Integer.parseInt(stock.getText()));
+            producto.setEstado(estado.getText());
 
             CallableStatement cs = conexion.estableceConexion().prepareCall(consulta);
             cs.setString(1, producto.getNombre());
             cs.setDouble(2, producto.getPrecio());
             cs.setInt(3, producto.getStock());
-
+            cs.setString(4, producto.getEstado());
+            
+           
             cs.execute();
             JOptionPane.showMessageDialog(null, "Producto guardado");
 
@@ -71,7 +78,7 @@ public class controladorProductos {
         }
     }
 
-    public void seleccionarProducto(JTable tabla, JTextField id, JTextField nombre, JTextField precio, JTextField stock) {
+    public void seleccionarProducto(JTable tabla, JTextField id, JTextField nombre, JTextField precio, JTextField stock, JTextField estado ) {
         int fila = tabla.getSelectedRow();
 
         try {
@@ -87,30 +94,39 @@ public class controladorProductos {
     }
 
     public void modificarProducto(JTextField id, JTextField nombre, JTextField precio, JTextField stock) {
-        CConexion conexion = new CConexion();
-        ModeloProductos producto = new ModeloProductos();
+    CConexion conexion = new CConexion();
+    ModeloProductos producto = new ModeloProductos();
 
-        String consulta = "UPDATE productos SET nombres = ?, precio = ?, stock = ? WHERE id = ?";
+    String consulta = "UPDATE productos SET nombres = ?, precio = ?, stock = ?, estado = ? WHERE id = ?";
 
-        try {
-            producto.setId(Integer.parseInt(id.getText()));
-            producto.setNombre(nombre.getText());
-            producto.setPrecio(Double.parseDouble(precio.getText()));
-            producto.setStock(Integer.parseInt(stock.getText()));
+    try {
+        // Asignamos los valores al objeto producto
+        producto.setId(Integer.parseInt(id.getText()));
+        producto.setNombre(nombre.getText());
+        producto.setPrecio(Double.parseDouble(precio.getText()));
+        int stockValor = Integer.parseInt(stock.getText());
+        producto.setStock(stockValor);
 
-            CallableStatement cs = conexion.estableceConexion().prepareCall(consulta);
-            cs.setString(1, producto.getNombre());
-            cs.setDouble(2, producto.getPrecio());
-            cs.setInt(3, producto.getStock());
-            cs.setInt(4, producto.getId());
+        // Determinamos el estado según el stock
+        String estado = stockValor > 0 ? "activo" : "no activo";
+        producto.setEstado(estado);
 
-            cs.execute();
-            JOptionPane.showMessageDialog(null, "Producto modificado");
+        // Usamos PreparedStatement en lugar de CallableStatement
+        PreparedStatement ps = conexion.estableceConexion().prepareStatement(consulta);
+        ps.setString(1, producto.getNombre());
+        ps.setDouble(2, producto.getPrecio());
+        ps.setInt(3, producto.getStock());
+        ps.setString(4, producto.getEstado());
+        ps.setInt(5, producto.getId());
 
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "ERROR al modificar: " + e.toString());
-        }
+        ps.executeUpdate(); // Usamos executeUpdate para INSERT, UPDATE o DELETE
+        JOptionPane.showMessageDialog(null, "Producto modificado");
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "ERROR al modificar: " + e.toString());
     }
+}
+
 
     public void eliminarProducto(JTextField id) {
         CConexion conexion = new CConexion();
@@ -131,11 +147,13 @@ public class controladorProductos {
         }
     }
 
-    public void limpiarCampos(JTextField id, JTextField nombre, JTextField precio, JTextField stock) {
+    public void limpiarCampos(JTextField id, JTextField nombre, JTextField precio, JTextField stock, JTextField estado ) {
         id.setText("");
         nombre.setText("");
         precio.setText("");
         stock.setText("");
+        estado.setText("");
+        
     }
 }
 

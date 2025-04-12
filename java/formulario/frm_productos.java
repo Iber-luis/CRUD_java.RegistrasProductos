@@ -45,6 +45,7 @@ import javax.swing.JTable;
         txt_precio = new javax.swing.JTextField();
         txt_stock = new javax.swing.JTextField();
         btn_limpiar = new javax.swing.JButton();
+        txt_estado = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         btn_guardar = new javax.swing.JButton();
@@ -135,12 +136,21 @@ import javax.swing.JTable;
             }
         });
 
+        txt_estado.setBorder(javax.swing.BorderFactory.createTitledBorder("Estado"));
+        txt_estado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_estadoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(189, 189, 189)
+                .addGap(17, 17, 17)
+                .addComponent(txt_estado, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(96, 96, 96)
                 .addComponent(btn_limpiar)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -163,9 +173,11 @@ import javax.swing.JTable;
                     .addComponent(txt_nombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txt_precio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txt_stock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
-                .addComponent(btn_limpiar)
-                .addGap(22, 22, 22))
+                .addGap(31, 31, 31)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txt_estado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_limpiar))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         jPanel2.setBackground(new java.awt.Color(153, 153, 153));
@@ -318,15 +330,15 @@ import javax.swing.JTable;
 
     private void btn_guardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_guardarActionPerformed
         controladorProductos controlador = new controladorProductos();
-        controlador.agregarProducto(txt_nombre, txt_precio, txt_stock);
-        controlador.limpiarCampos(txt_id, txt_nombre, txt_precio, txt_stock);
+        controlador.agregarProducto(txt_nombre, txt_precio, txt_stock, txt_estado);
+        controlador.limpiarCampos(txt_id, txt_nombre, txt_precio, txt_stock, txt_estado);
         controlador.mostrarProductos(tb_productos);
     }//GEN-LAST:event_btn_guardarActionPerformed
 
     private void btn_actualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_actualizarActionPerformed
         controladorProductos controlador = new controladorProductos();
         controlador.modificarProducto(txt_id, txt_nombre, txt_precio, txt_stock);
-        controlador.limpiarCampos(txt_id, txt_nombre, txt_precio, txt_stock);
+        controlador.limpiarCampos(txt_id, txt_nombre, txt_precio, txt_stock, txt_estado);
         controlador.mostrarProductos(tablaproductos);
         controlador.mostrarProductos(tb_productos);
     }//GEN-LAST:event_btn_actualizarActionPerformed
@@ -334,20 +346,24 @@ import javax.swing.JTable;
     private void btn_eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_eliminarActionPerformed
         controladorProductos controlador = new controladorProductos();
         controlador.eliminarProducto(txt_id);
-        controlador.limpiarCampos(txt_id, txt_nombre, txt_precio, txt_stock);
+        controlador.limpiarCampos(txt_id, txt_nombre, txt_precio, txt_stock, txt_estado);
         controlador.mostrarProductos(tablaproductos);
         controlador.mostrarProductos(tb_productos);
     }//GEN-LAST:event_btn_eliminarActionPerformed
 
     private void btn_limpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_limpiarActionPerformed
         controladorProductos controlador = new controladorProductos();
-        controlador.limpiarCampos(txt_id, txt_nombre, txt_precio, txt_stock);
+        controlador.limpiarCampos(txt_id, txt_nombre, txt_precio, txt_stock, txt_estado);
     }//GEN-LAST:event_btn_limpiarActionPerformed
 
     private void tb_productosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tb_productosMouseClicked
         controladorProductos controlador = new controladorProductos();
-        controlador.seleccionarProducto(tb_productos, txt_id, txt_nombre, txt_precio, txt_stock);
+        controlador.seleccionarProducto(tb_productos, txt_id, txt_nombre, txt_precio, txt_stock, txt_estado);
     }//GEN-LAST:event_tb_productosMouseClicked
+
+    private void txt_estadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_estadoActionPerformed
+        txt_estado.requestFocus();
+    }//GEN-LAST:event_txt_estadoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -402,6 +418,7 @@ import javax.swing.JTable;
     private javax.swing.JTable jTable2;
     private javax.swing.JTable tablaproductos;
     private javax.swing.JTable tb_productos;
+    private javax.swing.JTextField txt_estado;
     private javax.swing.JTextField txt_id;
     private javax.swing.JTextField txt_nombre;
     private javax.swing.JTextField txt_precio;

@@ -4,6 +4,8 @@
  */
 package modelos;
 
+import com.mysql.cj.x.protobuf.MysqlxDatatypes;
+
 /**
  *
  * @author IBER LUIS
@@ -13,6 +15,15 @@ public class ModeloProductos {
      String nombre;
      double precio; 
      int stock;
+     String estado;
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
 
     public int getId() {
         return id;
@@ -44,5 +55,9 @@ public class ModeloProductos {
 
     public void setStock(int stock) {
         this.stock = stock;
+    }
+
+    public int getid() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

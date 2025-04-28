@@ -16,6 +16,7 @@ public class ModeloProductos {
      double precio; 
      int stock;
      String estado;
+     
 
     public String getEstado() {
         return estado;

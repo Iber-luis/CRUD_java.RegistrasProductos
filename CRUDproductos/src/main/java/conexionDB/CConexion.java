@@ -37,5 +37,9 @@ public class CConexion {
     public void cerrarConexion() {
         // Aquí podrías cerrar la conexión si quieres agregarlo
     }
+
+    public Connection conectar() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }
 
